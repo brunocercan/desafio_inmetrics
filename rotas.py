@@ -1,13 +1,19 @@
 from flask import Flask, request, jsonify, make_response
 from flask_mysqldb import MySQL
-from dao import ClienteDAO, EnderecoDAO
-from models import Cliente, Endereco
+from Produto.dao_produto import ProdutoDAO, InventarioDAO
+from Clientes.dao_cliente import ClienteDAO, EnderecoDAO
+from Clientes.models_cliente import Cliente
 from functools import wraps
+from app_main import app 
 import jsons
 
+db = MySQL(app)
 
-app = Flask(__name__)
-app.secret_key = 'desafio1'
+produto_dao = ProdutoDAO(db)
+inventario_dao = InventarioDAO(db)
+cliente_dao = ClienteDAO(db)
+endereco_dao = EnderecoDAO(db)
+
 
 #region AUTENTICAÇÃO HTTP BASIC
 def login(f):
@@ -19,41 +25,30 @@ def login(f):
       else:
          return make_response('Login ou senha incorreto!', 401, {'WWW-Authenticate' : 'Basic realm="Necessario Login"'})
    return decorated
-      
 #endregion
-
-#region CONFIG DB
-
-app.config['MYSQL_HOST'] = "127.0.0.1"
-app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = ""
-app.config['MYSQL_DB'] = "clientes_desafio1"
-app.config['MYSQL_PORT'] = 3306
-
-#endregion
-
-
-db = MySQL(app)
-cliente_dao = ClienteDAO(db)
-endereco_dao = EnderecoDAO(db)
 
 
 @app.route('/')
 @login
 def index():
-   return jsonify("index")
+    return jsonify('index')
 
-#region Rotas Clientes
+#region PRODUTOS
+@app.route('/inventario/buscar/<int:id>')
+def listar(id):
+    inventario = inventario_dao.filtrar_por_id(id)
+    a_dict = jsons.dump(inventario)
+    return jsonify(a_dict)
+#endregion
 
-#region LISTAR
+#region Clientes
+
 @app.route('/listar')
 @login
-def listar():
-   #flash('Listando Clientes')
+def cliente_listar():
    lista = cliente_dao.listar()
    a_dict = jsons.dump(lista)
    return jsonify(a_dict)
-#endregion
 
 #region CADASTRAR
 @app.route('/cadastrar', methods=['POST',])
@@ -102,7 +97,7 @@ def alterar(id):
 
 #endregion
 
-#region Rotas Endereco
+#region Enderecos
 
 #region LISTAR
 @app.route('/endereco/listar')
@@ -154,11 +149,10 @@ def end_alterar(id):
    id_cliente = request.json['id_cliente']
    cep = request.json['cep']
    endereco = Endereco(cidade, estado, logradouro, id_cliente, cep, id)
+   
    endereco_dao.alterar(endereco, id)
    return jsonify('ENDEREÇO ALTERADO COM SUCESSO!')
 #endregion
 
 
 #endregion
-
-app.run(debug=True)   

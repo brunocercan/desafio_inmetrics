@@ -1,4 +1,4 @@
-from models import Cliente, Endereco
+from Clientes.models_cliente import Cliente, Endereco
 from flask import jsonify
 import jsons
 
