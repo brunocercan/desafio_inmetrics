@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from Produto.dao_produto import ProdutoDAO, InventarioDAO
 from Clientes.dao_cliente import ClienteDAO, EnderecoDAO
 from Clientes.models_cliente import Cliente
+from Produto.models_produto import Produto
 from functools import wraps
 from app_main import app 
 import jsons
@@ -27,25 +28,65 @@ def login(f):
    return decorated
 #endregion
 
-
 @app.route('/')
 @login
 def index():
     return jsonify('index')
 
-#region PRODUTOS
+#region Produtos
+
+#region Inventario
 @app.route('/inventario/buscar/<int:id>')
-def listar(id):
+def inv_listar(id):
     inventario = inventario_dao.filtrar_por_id(id)
     a_dict = jsons.dump(inventario)
     return jsonify(a_dict)
+#endregion
+
+@app.route('/produto/listar')
+def prod_listar():
+   produtos = produto_dao.listar()
+   return jsonify(produtos)
+
+
+@app.route('/produto/buscar/<int:id>')
+def prod_buscar(id):
+   produto = produto_dao.buscar(id)
+   return jsonify(produto)
+
+@app.route('/produto/cadastrar', methods = ['POST', ])
+def prod_cadastrar():
+   nome = request.json['nome']
+   descricao = request.json['descricao']
+   preco = request.json['preco']
+   contratacao = request.json['contratacao']
+   produto = Produto(nome, descricao, preco, contratacao)
+   produto_dao.salvar(produto)
+   return jsonify('produto cadastrado com sucesso!')
+
+@app.route('/produto/alterar/<int:id>', methods =['PUT', ])
+def prod_alterar(id):
+   nome = request.json['nome']
+   descricao = request.json['descricao']
+   preco = request.json['preco']
+   contratacao = request.json['contratacao']
+   produto = Produto(nome, descricao, preco, contratacao, id = id)
+   produto_dao.alterar(produto, id)
+   return jsonify('produto alterado com sucesso')
+
+
+@app.route('/produto/deletar/<int:id>', methods = ['DELETE', ])
+def prod_deletar(id):
+   return produto_dao.deletar(id)
+
+
 #endregion
 
 #region Clientes
 
 @app.route('/listar')
 @login
-def cliente_listar():
+def listar():
    lista = cliente_dao.listar()
    a_dict = jsons.dump(lista)
    return jsonify(a_dict)
