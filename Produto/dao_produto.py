@@ -1,4 +1,4 @@
-from Produto.models_produto import Produto, InventarioTupla
+from Produto.models_produto import Produto, InventarioTupla, Inventario
 from flask import jsonify
 import jsons
 
@@ -46,8 +46,14 @@ class InventarioDAO:
              inventario.quantidade from produtos inner join inventario on inventario.id_produto = produtos.id \
                   inner join clientes_desafio1.clientes on clientes.id = inventario.id_cliente \
                        where clientes.id = %s', (id, ))
-        inventario = cursor.fetchall() 
+        inventario = cursor.fetchall()
         return converte_inventario(inventario)
+
+    def salvar(self, inventario):
+        cursor = self.__db.connection.cursor()
+        cursor.execute('insert into clientes_desafio1.inventario (id_produto, quantidade, id_cliente) values (%s, %s, %s)', (inventario.id_produto, inventario.quantidade, inventario.id_cliente))
+        return inventario
+
 
 
 def converte_produto(produtos):

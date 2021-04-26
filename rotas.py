@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify, make_response
 from flask_mysqldb import MySQL
 from Produto.dao_produto import ProdutoDAO, InventarioDAO
 from Clientes.dao_cliente import ClienteDAO, EnderecoDAO
-from Clientes.models_cliente import Cliente
-from Produto.models_produto import Produto
+from Clientes.models_cliente import Cliente, Endereco
+from Produto.models_produto import Produto, Inventario
 from functools import wraps
-from app_main import app 
+from app_main import app
 import jsons
+import json
 
 db = MySQL(app)
 
@@ -38,9 +39,22 @@ def index():
 #region Inventario
 @app.route('/inventario/buscar/<int:id>')
 def inv_listar(id):
-    inventario = inventario_dao.filtrar_por_id(id)
-    a_dict = jsons.dump(inventario)
-    return jsonify(a_dict)
+      if verifica_id(id):
+         inventario = inventario_dao.filtrar_por_id(id)
+         a_dict = jsons.dump(inventario)
+         return jsonify(a_dict)
+      else:
+         return jsonify('id cliente invalido!')
+      
+
+@app.route('/inventario/cadastrar', methods=['POST'])
+def inv_cadastrar():
+   id_produto = request.json['id_produto']
+   quantidade = request.json['quantidade']
+   id_cliente = request.json['id_cliente']
+   inventario = Inventario(id_produto, quantidade, id_cliente)
+   inventario_dao.salvar(inventario)
+   return inv_listar(id_cliente)
 #endregion
 
 @app.route('/produto/listar')
@@ -119,8 +133,11 @@ def buscar(id):
 #region DELETAR
 @app.route('/deletar/<int:id>', methods=['DELETE'])
 def deletar(id):
-   cliente_dao.deletar(id)
-   return jsonify('CLIENTE DELETADO COM SUCESSO!')
+   if verifica_id(id):
+      cliente_dao.deletar(id)
+      return jsonify('CLIENTE DELETADO COM SUCESSO!')
+   else:
+      return jsonify('id invalido')
 #endregion
 
 #region ALTERAR
@@ -197,3 +214,12 @@ def end_alterar(id):
 
 
 #endregion
+
+def verifica_id(id):
+   try:
+      testa_id_cliente = cliente_dao.filtrar_por_id(id)
+   except:
+      pass
+      return False
+   else:
+      return True

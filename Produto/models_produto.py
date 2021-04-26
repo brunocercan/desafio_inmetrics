@@ -14,3 +14,9 @@ class InventarioTupla:
         self.produto_desc = produto_desc
         self.id_produto = id_produto
         self.quantidade = quantidade
+
+class Inventario:
+    def __init__(self, id_produto, quantidade, id_cliente):
+        self.id_produto = id_produto
+        self.quantidade = quantidade
+        self.id_cliente = id_cliente
