@@ -21,34 +21,42 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
 ### Tabela Clientes:
 
-- ID: chave primária para identificação do cliente e uso em funções que necessitam filtrar clientes int not null primary key auto_increment
-- email: varchar(30)
-- cpf: varchar(11)
-- nome: varchar(30)
-- sexo: enum('M', 'F')
+| Coluna    | Tipo |
+|-------|-----------------------------------|
+| id | INT, AUTO_INCREMENT, NOT NULL PK                  |
+| email | VARCHAR(30)                       |
+| cpf   | VARCHAR(11)                       |
+| nome  | VARCHAR(30)                       |
+| sexo  | ENUM('M', 'F')                    |
 
 ### Tabela Endereco
 
-- id_endereco: chave primária para identificação do endereco - int not null primary key auto_increment
-- cidade: varchar(30)
-- estado: varchar(30)
-- logradouro: varchar(30)
-- id_cliente: chave estrangeira para relacionamento com tabela clientes - int
-- cep: varchar(30)
+| Coluna      | Tipo                              |
+|-------------|-----------------------------------|
+| id_endereco | INT, AUTO_INCREMENT, NOT NULL, PK |
+| cidade      | VARCHAR(30)                       |
+| estado      | VARCHAR(30)                       |
+| logradouro  | VARCHAR(30)                       |
+| id_cliente  | FK                                |
+| cep         | VARCHAR(30)                       |
 
 ### Tabela Produtos
 
-- id : chave primaria para identificação do produto - int not null primary key auto_increment
-- nome : varchar(30)
-- descricao: varchar(255)
-- preco: decimal(10,2)
-- contratacao: enum('S', 'N')
+| Coluna      | Tipo                              |
+|-------------|-----------------------------------|
+| id          | INT, AUTO_INCREMENT, NOT NULL, PK |
+| nome        | VARCHAR(30)                       |
+| descricao   | VARCHAR(255)                      |
+| preco       | DECIMAL(10,2)                     |
+| contratacao | ENUM('S', 'N')                    |
 
 ### Tabela inventario
 
-- id_produto: chave estrangeira da tabela produto
-- quantidade: int
-- id_cliente: chave estrangeira da tabela cliente
+| Coluna     | Tipo |
+|------------|------|
+| id_produto | FK   |
+| quantidade | INT  |
+| id_cliente | FK   |
 
 ## Funções da API:
 
