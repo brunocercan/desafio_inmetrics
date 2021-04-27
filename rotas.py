@@ -65,8 +65,13 @@ def prod_listar():
 
 @app.route('/produto/buscar/<int:id>')
 def prod_buscar(id):
-   produto = produto_dao.buscar(id)
-   return jsonify(produto)
+   if verifica_id_produto(id):
+      produto = produto_dao.buscar(id)
+      return jsonify(produto)
+   else:
+      return jsonify('id produto invalido')
+
+   
 
 @app.route('/produto/cadastrar', methods = ['POST', ])
 def prod_cadastrar():
@@ -91,7 +96,12 @@ def prod_alterar(id):
 
 @app.route('/produto/deletar/<int:id>', methods = ['DELETE', ])
 def prod_deletar(id):
-   return produto_dao.deletar(id)
+   if verifica_id_produto(id):
+      return produto_dao.deletar(id)
+   else:
+      return jsonify('id produto invalido')
+
+   
 
 
 #endregion
@@ -143,14 +153,18 @@ def deletar(id):
 #region ALTERAR
 @app.route('/alterar/<int:id>', methods=['PUT'])
 def alterar(id):
-   cliente = cliente_dao.filtrar_por_id(id)
-   nome = request.json['nome']
-   email = request.json['email']
-   cpf = request.json['cpf']
-   sexo = request.json['sexo']
-   cliente = Cliente(email, cpf, nome, sexo, id)
-   cliente_dao.alterar(cliente, id)
-   return jsonify('CLIENTE ALTERADO COM SUCESSO!', jsons.dump(cliente))
+   if verifica_id(id):
+      cliente = cliente_dao.filtrar_por_id(id)
+      nome = request.json['nome']
+      email = request.json['email']
+      cpf = request.json['cpf']
+      sexo = request.json['sexo']
+      cliente = Cliente(email, cpf, nome, sexo, id)
+      cliente_dao.alterar(cliente, id)
+      return jsonify('CLIENTE ALTERADO COM SUCESSO!', jsons.dump(cliente))
+   else:
+      return jsonify('ID CLIENTE INVALIDO')
+   
 #endregion
 
 #endregion
@@ -167,8 +181,11 @@ def end_listar():
 #region BUSCAR
 @app.route('/endereco/buscar/<int:id>')
 def end_buscar(id):
-   lista = endereco_dao.filtrar_por_id(id)
-   return jsonify(jsons.dump(lista))
+   if verifica_id(id):
+      lista = endereco_dao.filtrar_por_id(id)
+      return jsonify(jsons.dump(lista))
+   else:
+      return jsonify('id cliente invalido')
 #endregion
 
 #region CADASTRAR
@@ -207,7 +224,6 @@ def end_alterar(id):
    id_cliente = request.json['id_cliente']
    cep = request.json['cep']
    endereco = Endereco(cidade, estado, logradouro, id_cliente, cep, id)
-   
    endereco_dao.alterar(endereco, id)
    return jsonify('ENDEREÇO ALTERADO COM SUCESSO!')
 #endregion
@@ -218,6 +234,15 @@ def end_alterar(id):
 def verifica_id(id):
    try:
       testa_id_cliente = cliente_dao.filtrar_por_id(id)
+   except:
+      pass
+      return False
+   else:
+      return True
+
+def verifica_id_produto(id):
+   try:
+      testa_id_produto = produto_dao.buscar(id)
    except:
       pass
       return False
