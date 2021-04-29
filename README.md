@@ -60,7 +60,7 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
 ## Funções da API:
 
-> Clientes
+### Clientes
 
 - Listar (rota /listar)
 
@@ -72,9 +72,25 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
 - Cadastrar (rota /cadastrar)
 
+        Entrada:
+        {
+        "cpf": "87654389087",
+        "email": "diego@email.com",
+        "nome": "Diego",
+        "sexo": "M"
+        }
+
     Cadastra um novo cliente no banco de dados. Retorna 'cliente cadastrado com sucesso'
 
 - Alterar (rota /alterar/id)
+
+        Entrada:
+        {
+        "cpf": "87654321578",
+        "email": "diego.teste@email.com",
+        "nome": "Diego Teste",
+        "sexo": "M"
+        }
 
     Altera os dados de um cliente já cadastrado no banco de dados pelo id. Retorna 'cliente alterado com sucesso' e tabela com as informações do cliente alterado abaixo.
 
@@ -82,7 +98,7 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
     Deleta o cliente cadastrado no banco de dados pelo id. Retorna 'cliente deletado com sucesso'
 
-> Endereços
+### Endereços
 
 - Listar (rota /endereco/listar)
 
@@ -94,9 +110,27 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
 - Cadastrar (rota /endereco/cadastrar
 
+        Entrada:
+        {
+        "cep": "098654123",
+        "cidade": "Rezende",
+        "estado": "RJ",
+        "id_cliente": 14,
+        "logradouro": "Rua coral, 9"
+        }
+
     Cadastra um novo endereço no banco de dados
 
 - Alterar (rota /endereco/alterar/id)
+
+        Entrada:
+        {
+        "cep": "06283126",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "id_cliente": 22,
+        "logradouro": "Avenida das Laranjeiras, 40"
+        }
 
     Altera um endereço cadastrado no banco de dados pelo id do endereço
 
@@ -104,11 +138,11 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
     Deleta um endereço cadastrado no banco de dados pelo id do endereço
 
-> Autenticação
+### Autenticação
 
 - O sistema necessita de autenticação para acesso aos dados. Ao entrar em qualquer rota se você não estiver logado o sistema irá pedir login e senha.
 
-> Produtos
+### Produtos
 
 - Listar (rota /produto/listar)
 
@@ -119,10 +153,27 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
     Retorna o produto com o id informado
 
 - Cadastrar (rota /produto/cadastrar)
+    
+        Entrada:
+        {
+        "contratacao": "N",
+        "descricao": "Monitor Gamer LG 120hz fullhd",
+        "nome": "Monitor LG18k20",
+        "preco": "950.00"
+        }
 
     Cadastra um novo produto no banco de dados. Retorna 'produto cadastrado com sucesso'
 
 - Alterar (rota /produto/alterar/id)
+
+        Entrada: 
+        {
+        "contratacao": "N",
+        "descricao": "Monitor Gamer LG 120hz fullhd",
+        "nome": "Monitor LG18k20",
+        "preco": "1000.00"
+        }   
+
 
     Altera os dados de um produto já cadastrado no banco de dados pelo id. Retorna 'produto alterado com sucesso' .
 
@@ -130,7 +181,7 @@ API para Catálogo de produtos e Inventário de produtos usando DDD (Domain-Driv
 
     Deleta o produto cadastrado no banco de dados pelo id. Retorna 'produto deletado com sucesso'
 
-> Inventário
+### Inventário
 
 - Buscar (rota /inventario/buscar/id)
 
