@@ -57,13 +57,13 @@ def inv_cadastrar():
    return inv_listar(id_cliente)
 #endregion
 
-@app.route('/produto/listar')
+@app.route('/produtos/listar')
 def prod_listar():
    produtos = produto_dao.listar()
    return jsonify(produtos)
 
 
-@app.route('/produto/buscar/<int:id>')
+@app.route('/produtos/buscar/<int:id>')
 def prod_buscar(id):
    if verifica_id_produto(id):
       produto = produto_dao.buscar(id)
@@ -73,7 +73,7 @@ def prod_buscar(id):
 
    
 
-@app.route('/produto/cadastrar', methods = ['POST', ])
+@app.route('/produtos/cadastrar', methods = ['POST', ])
 def prod_cadastrar():
    nome = request.json['nome']
    descricao = request.json['descricao']
@@ -83,7 +83,7 @@ def prod_cadastrar():
    produto_dao.salvar(produto)
    return jsonify('produto cadastrado com sucesso!')
 
-@app.route('/produto/alterar/<int:id>', methods =['PUT', ])
+@app.route('/produtos/alterar/<int:id>', methods =['PUT', ])
 def prod_alterar(id):
    nome = request.json['nome']
    descricao = request.json['descricao']
@@ -94,7 +94,7 @@ def prod_alterar(id):
    return jsonify('produto alterado com sucesso')
 
 
-@app.route('/produto/deletar/<int:id>', methods = ['DELETE', ])
+@app.route('/produtos/deletar/<int:id>', methods = ['DELETE', ])
 def prod_deletar(id):
    if verifica_id_produto(id):
       return produto_dao.deletar(id)
@@ -108,7 +108,7 @@ def prod_deletar(id):
 
 #region Clientes
 
-@app.route('/listar')
+@app.route('/clientes/listar')
 @login
 def listar():
    lista = cliente_dao.listar()
@@ -116,7 +116,7 @@ def listar():
    return jsonify(a_dict)
 
 #region CADASTRAR
-@app.route('/cadastrar', methods=['POST',])
+@app.route('/clientes/cadastrar', methods=['POST',])
 def cadastrar():
    email = request.json['email']
    cpf = request.json['cpf']
@@ -128,7 +128,7 @@ def cadastrar():
 #endregion
 
 #region BUSCAR
-@app.route('/buscar/<int:id>')
+@app.route('/clientes/buscar/<int:id>')
 def buscar(id):
    try:
       cliente = cliente_dao.filtrar_por_id(id)
@@ -141,7 +141,7 @@ def buscar(id):
 #endregion
 
 #region DELETAR
-@app.route('/deletar/<int:id>', methods=['DELETE'])
+@app.route('/clientes/deletar/<int:id>', methods=['DELETE'])
 def deletar(id):
    if verifica_id(id):
       cliente_dao.deletar(id)
@@ -151,7 +151,7 @@ def deletar(id):
 #endregion
 
 #region ALTERAR
-@app.route('/alterar/<int:id>', methods=['PUT'])
+@app.route('/clientes/alterar/<int:id>', methods=['PUT'])
 def alterar(id):
    if verifica_id(id):
       cliente = cliente_dao.filtrar_por_id(id)
@@ -172,14 +172,14 @@ def alterar(id):
 #region Enderecos
 
 #region LISTAR
-@app.route('/endereco/listar')
+@app.route('/enderecos/listar')
 def end_listar():
    lista = endereco_dao.listar()
    return jsonify(jsons.dump(lista))
 #endregion
 
 #region BUSCAR
-@app.route('/endereco/buscar/<int:id>')
+@app.route('/enderecos/buscar/<int:id>')
 def end_buscar(id):
    if verifica_id(id):
       lista = endereco_dao.filtrar_por_id(id)
@@ -189,7 +189,7 @@ def end_buscar(id):
 #endregion
 
 #region CADASTRAR
-@app.route('/endereco/cadastrar', methods=['POST'])
+@app.route('/enderecos/cadastrar', methods=['POST'])
 def end_cadastrar():
    cidade = request.json['cidade']
    estado = request.json['estado']
@@ -208,14 +208,14 @@ def end_cadastrar():
 #endregion
 
 #region DELETAR
-@app.route('/endereco/deletar/<int:id>', methods=['DELETE'])
+@app.route('/enderecos/deletar/<int:id>', methods=['DELETE'])
 def end_deletar(id):
       endereco_dao.deletar(id)
       return jsonify('ENDEREÇO DELETADO COM SUCESSO')
 #endregion
 
 #region ALTERAR
-@app.route('/endereco/alterar/<int:id>', methods=['PUT'])
+@app.route('/enderecos/alterar/<int:id>', methods=['PUT'])
 def end_alterar(id):
    endereco_dao.filtrar_por_id(id)
    cidade = request.json['cidade']
