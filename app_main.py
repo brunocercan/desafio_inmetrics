@@ -7,4 +7,4 @@ app.config.from_pyfile('db_config.py')
 from rotas import *
 
 if __name__ == '__main__':
-    app.run(host="10.0.1.140")
+    app.run(host="0.0.0.0")
