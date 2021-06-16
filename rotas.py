@@ -52,9 +52,12 @@ def inv_cadastrar():
    id_produto = request.json['id_produto']
    quantidade = request.json['quantidade']
    id_cliente = request.json['id_cliente']
-   inventario = Inventario(id_produto, quantidade, id_cliente)
-   inventario_dao.salvar(inventario)
-   return inv_listar(id_cliente)
+   if verifica_id(db, id_cliente) == None:
+      return jsonify('id cliente invalido')
+   else:
+      inventario = Inventario(id_produto, quantidade, id_cliente)
+      inventario_dao.salvar(inventario)
+      return inv_listar(id_cliente)
 #endregion
 
 @app.route('/produtos/listar')
